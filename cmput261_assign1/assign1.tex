@@ -1,0 +1,237 @@
+% -*- mode:LaTeX; mode:flyspell; ispell-local-dictionary:"en_CA"; -*-
+\documentclass{article}
+\newcommand{\classname}{CMPUT~261}
+\newcommand{\termname}{Winter~2025}
+\newcommand{\duedate}{Thursday, February 1/2025}
+\newcommand{\assignNum}{1}
+%% preamble for assignments (after documentclass, before begin{document})
+% !!! DO NOT include shortcut definitions like `\E` etc, because this will get inserted directly at the beginning of the assignment template.
+\newcommand{\noanswers}{}
+
+% Almost always
+\usepackage{enumerate}
+\usepackage{booktabs}
+\usepackage{amsmath, amsthm, amsfonts}
+\usepackage{dsfont}
+\usepackage{graphicx}
+\graphicspath{{./}{qs/}}
+\usepackage{color}
+\usepackage[verbose,letterpaper,top=1.25in,bottom=1in,left=1.25in,right=1.25in]{geometry}
+\usepackage{lastpage}
+\usepackage{sgamevar}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{\baselineskip}
+
+% extra stuff for assignments
+\newcounter{totalpoints}
+\setcounter{totalpoints}{0}
+
+\newcommand{\question}[2][]{(\textbf{#2}; \subtotal{#1})}
+\newcommand{\subtotal}[1]{\newcounter{#1}\setcounter{#1}{0}\regtotcounter{#1}\total{#1} points}
+\newcommand{\points}[2][]{{\addtocounter{totalpoints}{#2}\ifx&#1&\else\addtocounter{#1}{#2}\fi\textbf{[#2 points]}}}
+% \newcommand{\points}[1]{{\addtocounter{totalpoints}{#1}\textbf{[#1 points]}}}
+
+\newcommand{\qsFile}[1]{}
+\newcommand{\ansFile}[1]{}
+
+\usepackage{environ}
+\usepackage{etoolbox}
+\makeatletter
+\NewEnviron{answer}[1]
+{\ifx\BODY\@empty
+ \vspace{#1}%
+\else\ifdefined\noanswers
+ \vspace{#1}%
+\else
+ {\sf\color{blue} \BODY}%
+\fi\fi}
+\makeatother
+
+\usepackage{totcount}
+\regtotcounter{totalpoints}
+
+\begin{document}
+%% Headings for assignments (after begin{document})
+
+{\bigskip\hrule\bigskip
+\huge
+\noindent \classname{}, \termname{}\\
+Assignment \#\assignNum{}
+
+\large
+Due: \duedate{}\\
+Total points: \total{totalpoints}
+
+For this assignment use the following consultation model:
+\begin{enumerate}
+
+\item you can discuss assignment questions and exchange ideas with other \emph{current} \classname{} students;
+
+\item you must list all members of the discussion in your solution;
+
+\item you may {\bf not} share/exchange/discuss written material and/or code;
+
+\item you must write up your solutions individually;
+
+\item you must fully understand and be able to explain your solution in any amount of detail as requested by the instructor and/or the TAs.
+
+\end{enumerate}
+
+Anything that you use in your work and that is not your own creation must be properly cited by listing the original source. Failing to cite others' work is plagiarism and will be dealt with as an academic offence.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bigskip\bigskip\hrule\bigskip
+
+\vspace{1cm}
+\hspace{1cm}{\bf First name:} \underline{\hspace{7cm}}
+
+\vspace{1cm}
+\hspace{1cm}{\bf Last name:} \underline{\hspace{7cm}}
+
+\vspace{1cm}
+\hspace{1cm}{\bf CCID:} \underline{\hspace{5.5cm}}\verb|@ualberta.ca|
+
+\vspace{1cm}
+\bigskip\hrule\bigskip
+}
+
+\pagestyle{myheadings}
+\markboth{}{\classname{} --- Assignment \#\assignNum{}}
+
+\clearpage
+
+
+
+\begin{enumerate}
+\item \question[uninformed]{Uninformed search}
+
+\begin{enumerate}
+\item \points[uninformed]{14} \label{q:uninformed-graph}
+Construct a search graph with \textbf{no more than 10 nodes} for which all of the following are true:
+\begin{enumerate}[i.]
+    \item Least-cost search returns an optimal solution.
+    \item Depth-first search returns the highest-cost solution.
+    \item Breadth-first search returns a solution whose cost is strictly less than the highest-cost solution and strictly more than the least-cost solution.
+\end{enumerate}
+Note that this means your search graph must have at least 3 solution paths of differing costs.
+(You are allowed to have multiple goal nodes.)
+Be sure to include and formally describe each component of the search graph.
+If necessary for concreteness, specify the order in which successor paths are added to the frontier by each algorithm.
+\begin{answer}{2.5in}
+    % Answer here
+\end{answer}
+
+
+\item \points[uninformed]{5}
+List the paths that are removed from the frontier by a breadth-first search of the problem you specified in part~(\ref{q:uninformed-graph}), \textbf{in the order in which they are removed}.
+The algorithm should stop as soon as it returns a solution.
+\begin{answer}{2.5in}
+    % Answer here
+\end{answer}
+
+\item \points[uninformed]{5}
+List the paths that are removed from the frontier by a least cost first search of the problem you specified in part~(\ref{q:uninformed-graph}), \textbf{in the order in which they are removed}.
+The algorithm should stop as soon as it returns a solution.
+\begin{answer}{2.5in}
+    % Answer here
+\end{answer}
+
+
+\item \points[uninformed]{6}
+List the paths that are removed from the frontier by iterative deepening search (IDS) applied to the problem you specified in part~(\ref{q:uninformed-graph}), \textbf{in the order in which they are removed} at each depth limit. The algorithm should stop as soon as it returns a solution. Then, compare the total number of nodes expanded by IDS to those expanded by depth-first search.
+\begin{answer}{2.5in}
+    % Answer here
+\end{answer}
+
+
+\end{enumerate}
+
+
+
+
+
+\clearpage
+\item \question[heuristic]{Heuristic search}
+
+A group of four (4) researchers are being chased by hungry polar bears around the North Pole late at night.
+They come to a rope bridge over a ravine.  If they can all get over the bridge before the hungry polar bears arrive, they will survive.
+
+At most two people can cross at a time.  A person or pair of people can only cross when they have a flashlight with them.  The group has only a single flashlight among them, so one person must bring the flashlight back across the bridge to the starting side before anyone else can cross.
+
+Each person moves at a different pace:
+\begin{itemize}
+\item The Undergrad can cross the bridge in 1.5 minute
+\item The Grad Student can cross the bridge in 3 minutes
+\item The Postdoc can cross the bridge in 7.5 minutes
+\item The Professor can cross the bridge in 10 minutes
+\end{itemize}
+
+Each pair moves at the pace of its slowest member; i.e., the Undergrad and the Professor will take 10 minutes to cross if they go together.
+How can the whole group get to the other side of the bridge in the shortest possible time?
+
+\begin{enumerate}
+\item \points[heuristic]{20} \label{q:construct-rep}
+Represent this problem as a search graph.
+Be sure to include and formally describe each component of the search graph.
+\begin{answer}{2.5in}
+    % Answer here
+\end{answer}
+
+\item \points[heuristic]{5}
+What is the forward branching factor for your representation from part~(\ref{q:construct-rep})?
+Justify your answer.
+\begin{answer}{2.5in}
+    % Answer here
+\end{answer}
+
+\item \points[heuristic]{10} \label{q:construct-h}
+Construct an admissible heuristic for this problem that is non-constant (i.e., returns different values for at least two states).
+\begin{answer}{2.5in}
+    % Answer here
+\end{answer}
+
+
+\item \points[heuristic]{5}
+Argue that the heuristic from part~(\ref{q:construct-h}) is admissible.
+\begin{answer}{2.5in}
+    % Answer here
+\end{answer}
+
+
+\item \points[heuristic]{60} \label{q:code}
+Implement your representation from part~(\ref{q:construct-rep}) and heuristic from part~(\ref{q:construct-h}) in Python~3 by editing the \verb|Bear_problem| class in the provided \texttt{bear.py}.
+We will run your code with the command \verb|python3 bear.py|.
+Your code must complete within 2~minutes for full marks.\footnote{It should run in far less time than this.}
+
+\end{enumerate}
+
+
+\end{enumerate}
+
+
+%------------------------------------------------------------------------------------------
+\clearpage
+%% Footer for assignments that include NO coding component
+\section*{Submission}
+The assignment you downloaded from eClass is a single ZIP archive which includes this document as a PDF {\em and} its \LaTeX{} source.
+
+\medskip
+
+Each assignment is to be submitted electronically via eClass by the due date.
+\textbf{Your submission must be a a single PDF file containing your answers.} 
+
+To generate the PDF file with your answers you can do any of the following:
+
+\begin{itemize}
+    \item
+    insert your answers into the provided \LaTeX{} source file between \verb|\begin{answer}| and \verb|\end{answer}|. Then run the source through \LaTeX{} to produce a PDF file;
+
+    \item print out the provided PDF file and legibly write your answers in the blank spaces under each question. Make sure you write as legibly as possible for we cannot give you any points if we cannot read your hand-writing. Then scan the pages and include the scan in your ZIP submission to be uploaded on eClass;
+
+    \item use your favourite text processor and type up your answers there. Make sure you number your answers in the same way as the questions are numbered in this assignment.
+\end{itemize}
+
+
+\end{document}
