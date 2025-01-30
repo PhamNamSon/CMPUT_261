@@ -76,7 +76,12 @@ class Bear_problem(object):
         else:
             return 0
 
-        return max(self.researchers[person] for person in moved_researchers) if moved_researchers else 0
+        if moved_researchers:
+            max_value = 0
+            for person in moved_researchers:
+                max_value = max(max_value, self.researchers[person])
+            return max_value
+        return 0
 
     def cost(self, path):
         """Returns the cost of `path`"""
@@ -84,15 +89,19 @@ class Bear_problem(object):
 
     def heuristic(self, node):
         """Returns the heuristic value of `node`"""
-        left_side, right_side, light = node
-    
+        left_side, _, _ = node
+
         if not left_side:
             return 0
 
         if len(left_side) == 1:
             return self.researchers[next(iter(left_side))]
 
-        costs = sorted([self.researchers[person] for person in left_side], reverse=True)
+        costs = []
+        for person in left_side:
+            costs.append(self.researchers[person])
+
+        costs.sort(reverse=True)
 
         return sum(costs[:2]) if len(costs) > 1 else costs[0]
 
