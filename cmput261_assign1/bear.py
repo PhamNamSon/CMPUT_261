@@ -69,13 +69,12 @@ class Bear_problem(object):
         left_X, right_X, light_X = current_state
         left_Y, right_Y, light_Y = next_state
 
-        # Determine which side the movement happened on
         if light_X == "Left" and light_Y == "Right":
             moved_researchers = right_Y - right_X
         elif light_X == "Right" and light_Y == "Left":
             moved_researchers = left_Y - left_X
         else:
-            return 0  # No valid movement
+            return 0
 
         return max(self.researchers[person] for person in moved_researchers) if moved_researchers else 0
 
@@ -88,15 +87,13 @@ class Bear_problem(object):
         left_side, right_side, light = node
     
         if not left_side:
-            return 0  # No one left to move
+            return 0
 
         if len(left_side) == 1:
-            return self.researchers[next(iter(left_side))]  # Only one person left, return their cost
+            return self.researchers[next(iter(left_side))]
 
-        # Extract costs for all researchers on the left side
         costs = sorted([self.researchers[person] for person in left_side], reverse=True)
 
-        # Sum of the two highest costs
         return sum(costs[:2]) if len(costs) > 1 else costs[0]
 
     def search(self):
@@ -104,14 +101,14 @@ class Bear_problem(object):
         frontier = Frontier()
         start_node = self.start_node()
         frontier.add([(None, start_node)], 0)  
-        explored = set()  # Use a set for faster lookups
+        explored = set()
 
         while not frontier.is_empty():
             path = frontier.remove()
             _, current_node = path[-1]  
 
             if self.is_goal(current_node):
-                return path[1:]  # Remove (None, start_node) from result
+                return path[1:]
 
             if current_node in explored:
                 continue
